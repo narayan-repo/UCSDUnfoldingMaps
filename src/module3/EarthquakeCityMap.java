@@ -16,6 +16,7 @@ import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
+import de.fhpotsdam.unfolding.providers.OpenStreetMap;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.fhpotsdam.unfolding.geo.*;
 import de.fhpotsdam.unfolding.data.*;
@@ -60,7 +61,10 @@ public class EarthquakeCityMap extends PApplet {
 		    earthquakesURL = "2.5_week.atom"; 	// Same feed, saved Aug 7, 2015, for working offline
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 700, 500, new Google.GoogleMapProvider());
+//			map = new UnfoldingMap(this, 200, 50, 700, 500, new Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 700, 500, new OpenStreetMap.OpenStreetMapProvider() );
+//		    map = new UnfoldingMap(this, 200, 50, 650, 600, new MBTilesMapProvider(mbTilesString));
+
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 			//earthquakesURL = "2.5_week.atom";
 		}
@@ -80,22 +84,28 @@ public class EarthquakeCityMap extends PApplet {
 	    // earthquakes.  Then add each new SimplePointMarker to the 
 	    // List markers (so that it will be added to the map in the line below)
 	    
-	    /*
-	    //Marker example
-	    Location locVal = new Location(-38.14f,-73.03f);
-	    Feature valEq = new PointFeature(locVal);
+	    for(PointFeature earthquake : earthquakes) {
+		    Location loc = earthquake.getLocation();
+		    Marker marker = new SimplePointMarker(loc, earthquake.getProperties());
+		    markers.add(marker);
+	    }
 	    
-	    valEq.addProperty("title", "Valdivia, Chile");
-	    valEq.addProperty("magnitude", "9.5");
-	    valEq.addProperty("date", "May 22, 1960");
-	    valEq.addProperty("year", "1960");
-
-	    Marker marker = new SimplePointMarker(locVal, valEq.getProperties());
-	    map.addMarker(marker);
-	    
-	    */
 	    // Add the markers to the map so that they are displayed
 	    map.addMarkers(markers);
+	    
+	    int red = color(255, 0, 0);
+	    int yellow = color(255, 255, 0);
+	    
+	    for (Marker marker :markers) {
+	    	Object magObj = marker.getProperty("magnitude");
+		    float mag = Float.parseFloat(magObj.toString());
+	    	if (mag > 4) {
+	    		marker.setColor(red);
+	    	}
+	    	else {
+	    		marker.setColor(yellow);
+	    	}
+	    }
 	}
 		
 	/* createMarker: A suggested helper method that takes in an earthquake 
