@@ -30,6 +30,24 @@ public class Airport {
 		return result;
 		
 	}
+
+	public static String findAirportCodeByBinarySearch(String toFind, Airport[] airports) {
+		String result = "Did not find city";
+		int low = 0;
+		int high=airports.length-1;
+		int mid;
+		while(high>=low) {
+			mid=low + (high-low)/2;
+			if(toFind.compareTo(airports[mid].getCode()) == 0) {
+				return airports[mid].getCity();
+			}else if(toFind.compareTo(airports[mid].getCode()) > 0) {
+				low=mid+1;
+			}else {
+				high=mid-1;
+			}
+		}
+		return result;
+	}
 	
 	
 }

@@ -12,6 +12,7 @@ public class AirportSearch {
 		airports[2]=a3;
 		
 		System.out.println(Airport.findAirportCode("KOL", airports));
+		System.out.println(Airport.findAirportCodeByBinarySearch("MUM", airports));
 	}
 
 }
